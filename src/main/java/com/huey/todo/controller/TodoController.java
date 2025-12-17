@@ -1,9 +1,12 @@
 package com.huey.todo.controller;
 
 import com.huey.todo.entity.TodoItem;
+import com.huey.todo.model.TodoCreateDTO;
+import com.huey.todo.model.TodoUpdateDTO;
 import com.huey.todo.service.TodoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -33,7 +36,7 @@ public class TodoController {
     }
     @Operation(summary = "创建")
     @PostMapping
-    public TodoItem create(@RequestBody TodoItem item) {
+    public TodoItem create(@Valid @RequestBody TodoCreateDTO item) {
         return service.create(item);
     }
 
@@ -48,7 +51,7 @@ public class TodoController {
     @PutMapping("/{id}")
     public TodoItem update(
             @PathVariable String id,
-            @RequestBody TodoItem item) {
+            @RequestBody TodoUpdateDTO item) {
         return service.update(UUID.fromString(id), item);
     }
 

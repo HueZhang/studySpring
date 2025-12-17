@@ -1,6 +1,8 @@
 package com.huey.todo.service;
 
 import com.huey.todo.entity.TodoItem;
+import com.huey.todo.model.TodoCreateDTO;
+import com.huey.todo.model.TodoUpdateDTO;
 import com.huey.todo.repository.TodoRepository;
 import org.springframework.stereotype.Service;
 
@@ -18,26 +20,56 @@ public class TodoService {
     }
 
 
-    //
+    /**
+     * 获取全部
+     * @return
+     */
     public List<TodoItem> getAll() {
 
         return repository.findAll();
     }
 
+    /**
+     * 详情
+     * @param id
+     * @return
+     */
     public TodoItem getById(UUID id) {
         return repository.findById(id).orElseThrow(() -> new RuntimeException("Todo not found"));
     }
 
-    public TodoItem create(TodoItem item) {
+    /**
+     * 创建
+     * @param dto
+     * @return
+     */
+    public TodoItem create(TodoCreateDTO dto) {
+        TodoItem item = new TodoItem();
+        item.setId(UUID.randomUUID());
+        item.setTitle(dto.getTitle());
+        item.setDescription(dto.getDescription());
+        item.setDueDate(dto.getDueDate());
+        item.setPriority(dto.getPriority());
+        item.setCompleted(false);
         item.setCreatedDate(LocalDateTime.now());
         return repository.save(item);
     }
 
+    /**
+     *
+     * @param id
+     */
     public void delete(UUID id) {
         repository.deleteById(id);
     }
 
-    public TodoItem update(UUID id, TodoItem updated) {
+    /**
+     * 更新
+     * @param id
+     * @param updated
+     * @return
+     */
+    public TodoItem update(UUID id, TodoUpdateDTO updated) {
         TodoItem existing = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Todo not found"));
 
@@ -49,7 +81,11 @@ public class TodoService {
         return repository.save(existing);
     }
 
-
+    /**
+     * 切换状态
+     * @param id
+     * @return
+     */
     public TodoItem toggleCompleted(UUID id) {
         TodoItem item = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Todo not found"));
