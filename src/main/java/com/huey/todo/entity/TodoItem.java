@@ -1,35 +1,27 @@
 package com.huey.todo.entity;
 
 
-import jakarta.annotation.Nullable;
-import jakarta.persistence.*;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
-
 @Data
-@Entity // 告诉jpa需要映射到数据库表的实体
-@Table(name = "todo_item")
+@TableName("todo_item")
 public class TodoItem {
 
-    @Id
-    @GeneratedValue
-    private UUID id;
+    @TableId(type = IdType.ASSIGN_UUID)
+    private String id;
 
-    @Column(nullable = false)
+
     private String title;
-
     private String description;
-
     private LocalDateTime dueDate;
+    private Integer priority;
 
-    @Enumerated(EnumType.STRING) // 避免枚举顺序变了，数据库全炸
-    private EnumTodoPriority priority;
 
-    private boolean Completed;
-
+    private Boolean completed;
     private LocalDateTime createdDate;
-
     private LocalDateTime completedDate;
 }

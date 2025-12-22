@@ -34,30 +34,31 @@ public class TodoController {
     public TodoItem getById(@PathVariable String id) {
         return service.getById(java.util.UUID.fromString(id));
     }
+
     @Operation(summary = "创建")
     @PostMapping
-    public TodoItem create(@Valid @RequestBody TodoCreateDTO item) {
-        return service.create(item);
+    public void create(@Valid @RequestBody TodoCreateDTO item) {
+        service.create(item);
     }
 
-    @Operation(summary = "删除单条")
+/*    @Operation(summary = "删除单条")
     @DeleteMapping("/{id}")
     public void delete(@PathVariable String id) {
         service.delete(UUID.fromString(id));
-    }
+    }*/
 
 
     @Operation(summary = "更新 Todo")
     @PutMapping("/{id}")
-    public TodoItem update(
+    public void update(
             @PathVariable String id,
             @RequestBody TodoUpdateDTO item) {
-        return service.update(UUID.fromString(id), item);
+        service.update(id, item);
     }
 
     @Operation(summary = "切换 Todo 完成状态")
     @PatchMapping("/{id}/toggle")
-    public TodoItem toggleCompleted(@PathVariable String id) {
-        return service.toggleCompleted(UUID.fromString(id));
+    public void toggleCompleted(@PathVariable String id) {
+        service.toggle(id);
     }
 }
