@@ -1,7 +1,9 @@
 package com.huey.todo.controller;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.huey.todo.entity.TodoItem;
 import com.huey.todo.model.TodoCreateDTO;
+import com.huey.todo.model.TodoQueryDTO;
 import com.huey.todo.model.TodoUpdateDTO;
 import com.huey.todo.service.TodoService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -10,7 +12,6 @@ import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.UUID;
 
 @Tag(name = "Todo API", description = "Todo 管理接口")
 @RestController
@@ -21,6 +22,12 @@ public class TodoController {
 
     public TodoController(TodoService service) {
         this.service = service;
+    }
+
+    @Operation(summary = "分页获取Todo")
+    @GetMapping("/page")
+    public Page<TodoItem> page(TodoQueryDTO dto) {
+        return service.pageQuery(dto);
     }
 
     @Operation(summary = "获取所有 Todo")

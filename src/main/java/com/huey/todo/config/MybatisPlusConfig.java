@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Configuration;
 public class MybatisPlusConfig {
     /**
      * 添加分页插件
+     * MP 分页是通过拦截器实现的
      */
     @Bean
     public MybatisPlusInterceptor mybatisPlusInterceptor() {

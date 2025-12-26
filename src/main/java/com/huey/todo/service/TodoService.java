@@ -1,8 +1,11 @@
 package com.huey.todo.service;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.huey.todo.entity.TodoItem;
 import com.huey.todo.mapper.TodoMapper;
 import com.huey.todo.model.TodoCreateDTO;
+import com.huey.todo.model.TodoQueryDTO;
 import com.huey.todo.model.TodoUpdateDTO;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +20,30 @@ public class TodoService {
 
     public TodoService(TodoMapper mapper) {
         this.mapper = mapper;
+    }
+
+
+    /**
+     * 分页
+     * @param dto
+     * @return
+     */
+    public Page<TodoItem> pageQuery(TodoQueryDTO dto) {
+        LambdaQueryWrapper<TodoItem> wrapper = new LambdaQueryWrapper<>();
+        // 模糊查找
+        wrapper.like(dto.getTitle() != null && !dto.getTitle().isBlank(),TodoItem::getTitle,dto.getTitle());
+
+        //
+        wrapper.eq(dto.getPriority() != null, TodoItem::getPriority,dto.getPriority());
+
+        wrapper.eq(dto.getCompleted() != null, TodoItem::getCompleted, dto.getCompleted());
+
+        wrapper.orderByDesc(TodoItem::getDueDate);
+
+
+        var page = new Page<TodoItem>(dto.getPage(), dto.getPageSize());
+
+        return mapper.selectPage(page, wrapper);
     }
 
 
